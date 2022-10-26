@@ -1,7 +1,10 @@
 package com.example.start.model;
 
+import com.example.start.task.Car;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,4 +47,38 @@ class CarTest {
         car.setOwner("Ivan");
         assertEquals("Ivan", car.getOwner());
     }
+    @Test
+    void getListOfOwners(){
+        assertArrayEquals(new String[]{"Dmitrij"},car.getOwners().toArray());
+    }
+    @Test
+    void getListOfTwoOwners(){
+        car.setOwner("Ivan");
+        assertArrayEquals(new String[]{"Dmitrij", "Ivan"}, car.getOwners().toArray());
+    }
+    //Доступ к приватному методу без аргумента
+    @Test
+    public void testPrivateMethod(){
+        try {
+            Method method = Car.class.getDeclaredMethod("testMethod" , null);
+            method.setAccessible(true);
+            assertEquals("abc",method.invoke(car).toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    //Доступ к приватному методу с аргументом
+    @Test
+    public void testPrivateMethodWithArgument(){
+        try {
+            Method method = Car.class.getDeclaredMethod("testMethod" , String.class);
+            method.setAccessible(true);
+            assertEquals("abc",method.invoke(car, "abd" ).toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

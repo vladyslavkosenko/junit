@@ -1,4 +1,4 @@
-package com.example.start.model;
+package com.example.start.task;
 
 public class Dog {
     private String name;

@@ -1,6 +1,4 @@
-package com.example.start.model;
-
-import org.hibernate.loader.collection.OneToManyJoinWalker;
+package com.example.start.task;
 
 import java.util.ArrayList;
 
@@ -41,9 +39,16 @@ public class Car {
 
     public void setOwner(String owner) {
         this.owner = owner;
+        owners.add(owner);
     }
 
     public ArrayList<String> getOwners() {
         return owners;
+    }
+    private String testMethod(){
+        return "abc";
+    }
+    private String testMethod(String a){
+        return a;
     }
 }
