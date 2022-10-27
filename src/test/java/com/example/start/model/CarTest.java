@@ -3,6 +3,11 @@ package com.example.start.model;
 import com.example.start.task.Car;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.lang.reflect.Method;
 
@@ -29,7 +34,22 @@ class CarTest {
     void setNumber() {
         car.setNumber("1232");
         assertEquals("1232", car.getNumber());
+    }
 
+    @ParameterizedTest
+    //@ValueSource(strings = {"ABC-123", "DEF-456", "DFG-434"})
+    //@NullSource
+    //@EmptySource
+    @CsvSource({"'ABC', 'ABC'","'ABD', 'ABD'"})
+    void testSetNumberMultipleValues(String number, String x){
+        car.setNumber(number);
+        assertEquals(x, car.getNumber());
+    }
+
+    @ParameterizedTest
+    @CsvSource({"1, 5", "8, 12", "32, 36"})
+    void testInt( int input, int output){
+        assertEquals(car.testInt(input), output);
     }
 
     @Test
@@ -80,5 +100,6 @@ class CarTest {
         }
 
     }
+
 
 }

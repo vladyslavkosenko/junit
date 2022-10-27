@@ -45,10 +45,16 @@ public class Car {
     public ArrayList<String> getOwners() {
         return owners;
     }
-    private String testMethod(){
+
+    private String testMethod() {
         return "abc";
     }
-    private String testMethod(String a){
+
+    private String testMethod(String a) {
         return a;
+    }
+
+    public int testInt(int a) {
+        return a + 4;
     }
 }
