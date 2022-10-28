@@ -1,4 +1,4 @@
-package com.example.start.model;
+package com.example.start.task;
 
 import com.example.start.task.Dog;
 import org.junit.jupiter.api.BeforeAll;
