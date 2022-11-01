@@ -1,11 +1,15 @@
 package com.example.start.task2.service;
 
 import com.example.start.task2.dto.User;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.collection.IsEmptyCollection;
+import org.hamcrest.collection.IsMapContaining;
 import org.junit.jupiter.api.*;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest {
@@ -30,6 +34,9 @@ public class UserServiceTest {
     void getAllWhenThereIsNoUserThenReturnEmptyList() {
         System.out.println("Test 1: " + this);
         var users = userService.getAll();
+        //
+        MatcherAssert.assertThat(users, IsEmptyCollection.empty());
+        //
         assertTrue(users.isEmpty(), () -> "User list should be empty");
         // input -> [box = func] -> actual output
     }
@@ -54,6 +61,41 @@ public class UserServiceTest {
         // maybeUser.ifPresent(user -> assertEquals(IVAN, user));
         maybeUser.ifPresent(user -> assertThat(user).isEqualTo(IVAN));
         System.out.println(maybeUser + " is empty?");
+    }
+
+    //    @Test
+//    void trowExceptionIfUsernameOrPasswordIsNull() {
+//        try {
+//            userService.login(null, "dummy");
+//            fail("Login should throw exception");
+//        } catch (IllegalArgumentException ex) {
+//            assertTrue(true);
+//        }
+//    }
+    @Test
+    void trowExceptionIfUsernameOrPasswordIsNull() {
+        assertAll(
+                () -> {
+                   var exception = assertThrows(IllegalArgumentException.class, () -> userService.login(null, "dummy"));
+                   assertThat(exception.getMessage()).isEqualTo("username or password is null");
+                },
+                () -> assertThrows(IllegalArgumentException.class, () -> userService.login("dummy", null))
+        );
+
+    }
+
+    @Test
+    void userConvertedToMapId() {
+        userService.add(IVAN, PETR);
+        Map<Integer, User> users = userService.getAllConvertedById();
+        MatcherAssert.assertThat(users, IsMapContaining.hasKey(IVAN.getId()));
+        assertAll(
+                () -> assertThat(users).containsKeys(IVAN.getId(), PETR.getId()),
+                () -> assertThat(users).containsValues(IVAN, PETR)
+        );
+
+//        assertThat(users).containsKeys(IVAN.getId(), PETR.getId());
+//        assertThat(users).containsValues(IVAN, PETR);
     }
 
     @Test
