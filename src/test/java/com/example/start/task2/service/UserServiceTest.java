@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -57,23 +58,38 @@ public class UserServiceTest extends TestBase {
     @BeforeEach
     void prepare() {
         System.out.println("Before each: " + this);
-        this.userDao = mock(UserDao.class);
+        // this.userDao = mock(UserDao.class);
+        this.userDao = spy(new UserDao());
         this.userService = new UserService(userDao);
     }
 
     @Test
     void shouldDeleteExistedUser() {
         userService.add(IVAN);
-//        Mockito.doReturn(true).when(userDao).delete(IVAN.getId());
-      //  Mockito.doReturn(true).when(userDao).delete(Mockito.any());
-       // Mockito.when(userDao.delete(any())).thenReturn(true);
-        Mockito.when(userDao.delete(IVAN.getId())).thenReturn(true)
-                .thenReturn(false);
+        Mockito.doReturn(true).when(userDao).delete(IVAN.getId());
+        //  Mockito.doReturn(true).when(userDao).delete(Mockito.any());
+        // Mockito.when(userDao.delete(any())).thenReturn(true);
+//        Mockito.when(userDao.delete(IVAN.getId())).thenReturn(true)
+//                .thenReturn(false);
         var deleteResult = userService.delete(IVAN.getId());
         System.out.println(userService.delete(IVAN.getId()));
         System.out.println(userService.delete(IVAN.getId()));
+
+        var argumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        Mockito.verify(userDao, Mockito.times(3)).delete(IVAN.getId());
+       // Mockito.verifyNoInteractions();
+       // assertThat(argumentCaptor.getValue()).isEqualTo(1);
         assertThat(deleteResult).isTrue();
     }
+
+    @Test
+    void deleteWhenUserIsDeletedThenReturnTrue() {
+        userService.add(IVAN);
+        doReturn(true).when(userDao).delete(IVAN.getId());
+        var result = userService.delete(IVAN.getId());
+        assertThat(result).isTrue();
+    }
+
 
     @Test
     void getAllWhenThereIsNoUserThenReturnEmptyList() throws IOException {
@@ -232,5 +248,19 @@ public class UserServiceTest extends TestBase {
                 Arguments.of("dummy", "123", Optional.empty())
         );
 
+    }
+//    @Test
+//    @DisplayName("Should return true when the user is deleted")
+//    void deleteWhenUserIsDeletedThenReturnTrue() {
+//        userService.add(IVAN);
+//        var result = userService.delete(IVAN.getId());
+//        assertTrue(result);
+//    }
+
+    @Test
+    @DisplayName("Should return false when the user is not deleted")
+    void deleteWhenUserIsNotDeletedThenReturnFalse() {
+        when(userDao.delete(anyInt())).thenReturn(false);
+        assertFalse(userService.delete(1));
     }
 }
