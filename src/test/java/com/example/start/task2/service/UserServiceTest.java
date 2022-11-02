@@ -1,11 +1,11 @@
 package com.example.start.task2.service;
 
 import com.example.start.TestBase;
+import com.example.start.task2.dao.UserDao;
 import com.example.start.task2.dto.User;
-import com.example.start.task2.service.extension.ConditionExtension;
-import com.example.start.task2.service.extension.PostProcessingExtension;
-import com.example.start.task2.service.extension.ThrowableExtension;
-import com.example.start.task2.service.extension.UserServiceParamResolver;
+import com.example.start.task2.extension.ConditionExtension;
+import com.example.start.task2.extension.PostProcessingExtension;
+import com.example.start.task2.extension.UserServiceParamResolver;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.hamcrest.collection.IsMapContaining;
@@ -14,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -23,6 +25,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @Tag("fast")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -31,14 +34,15 @@ import static org.junit.jupiter.api.Assertions.*;
         UserServiceParamResolver.class,
         PostProcessingExtension.class,
         ConditionExtension.class,
-        ThrowableExtension.class
+//        ThrowableExtension.class // mast hew
 //        GlobalExtension.class
 })
 public class UserServiceTest extends TestBase {
     private static final User IVAN = User.of(1, "Ivan", "123");
     private static final User PETR = User.of(2, "Petr", "111");
-
     private UserService userService;
+
+    private UserDao userDao;
 
     UserServiceTest(TestInfo testInfo) {
         System.out.println();
@@ -51,9 +55,24 @@ public class UserServiceTest extends TestBase {
 
 
     @BeforeEach
-    void prepare(UserService userService) {
+    void prepare() {
         System.out.println("Before each: " + this);
-        this.userService = userService;
+        this.userDao = mock(UserDao.class);
+        this.userService = new UserService(userDao);
+    }
+
+    @Test
+    void shouldDeleteExistedUser() {
+        userService.add(IVAN);
+//        Mockito.doReturn(true).when(userDao).delete(IVAN.getId());
+      //  Mockito.doReturn(true).when(userDao).delete(Mockito.any());
+       // Mockito.when(userDao.delete(any())).thenReturn(true);
+        Mockito.when(userDao.delete(IVAN.getId())).thenReturn(true)
+                .thenReturn(false);
+        var deleteResult = userService.delete(IVAN.getId());
+        System.out.println(userService.delete(IVAN.getId()));
+        System.out.println(userService.delete(IVAN.getId()));
+        assertThat(deleteResult).isTrue();
     }
 
     @Test

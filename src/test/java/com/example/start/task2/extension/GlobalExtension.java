@@ -1,4 +1,4 @@
-package com.example.start.task2.service.extension;
+package com.example.start.task2.extension;
 
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;

@@ -1,4 +1,4 @@
-package com.example.start.task2.service.extension;
+package com.example.start.task2.extension;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;

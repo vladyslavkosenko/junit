@@ -1,5 +1,6 @@
 package com.example.start.task2.service;
 
+import com.example.start.task2.dao.UserDao;
 import com.example.start.task2.dto.User;
 
 import java.util.*;
@@ -10,20 +11,30 @@ import static java.util.stream.Collectors.toMap;
 public class UserService {
 
     private final List<User> users = new ArrayList<>();
+    private final UserDao userDao;
+
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public boolean delete(Integer userId) {
+        return userDao.delete(userId);
+
+    }
 
     public List<User> getAll() {
         return users;
     }
 
-//    public boolean add(User user) {
+    //    public boolean add(User user) {
 //        return users.add(user);
 //    }
-    public void add(User ... users) {
+    public void add(User... users) {
         this.users.addAll(Arrays.asList(users));
     }
 
     public Optional<User> login(String username, String password) {
-        if(username == null || password == null){
+        if (username == null || password == null) {
             throw new IllegalArgumentException("username or password is null");
         }
         return users.stream()
