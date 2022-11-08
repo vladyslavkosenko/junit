@@ -1,13 +1,11 @@
 package com.example.start.task2.service;
 
-import com.example.start.TestBase;
 import com.example.start.task2.dao.UserDao;
 import com.example.start.task2.dto.User;
 import com.example.start.task2.extension.ConditionExtension;
 import com.example.start.task2.extension.PostProcessingExtension;
 import com.example.start.task2.extension.UserServiceParamResolver;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.collection.IsEmptyCollection;
 import org.hamcrest.collection.IsMapContaining;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +13,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
@@ -26,7 +22,8 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 @Tag("fast")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -38,7 +35,7 @@ import static org.mockito.Mockito.*;
 //        ThrowableExtension.class // mast hew
 //        GlobalExtension.class
 })
-public class UserServiceTest extends TestBase {
+public class UserServiceTest {
     private static final User IVAN = User.of(1, "Ivan", "123");
     private static final User PETR = User.of(2, "Petr", "111");
     private UserService userService;
@@ -77,8 +74,8 @@ public class UserServiceTest extends TestBase {
 
         var argumentCaptor = ArgumentCaptor.forClass(Integer.class);
         Mockito.verify(userDao, Mockito.times(3)).delete(IVAN.getId());
-       // Mockito.verifyNoInteractions();
-       // assertThat(argumentCaptor.getValue()).isEqualTo(1);
+        // Mockito.verifyNoInteractions();
+        // assertThat(argumentCaptor.getValue()).isEqualTo(1);
         assertThat(deleteResult).isTrue();
     }
 
@@ -91,19 +88,19 @@ public class UserServiceTest extends TestBase {
     }
 
 
-    @Test
-    void getAllWhenThereIsNoUserThenReturnEmptyList() throws IOException {
-        if (true) {
-            throw new RuntimeException();
-        }
-        System.out.println("Test 1: " + this);
-        var users = userService.getAll();
-        //
-        MatcherAssert.assertThat(users, IsEmptyCollection.empty());
-        //
-        assertTrue(users.isEmpty(), "User list should be empty");
-        // input -> [box = func] -> actual output
-    }
+//    @Test
+//    void getAllWhenThereIsNoUserThenReturnEmptyList() throws IOException {
+//        if (true) {
+//            throw new RuntimeException();
+//        }
+//        System.out.println("Test 1: " + this);
+//        var users = userService.getAll();
+//        //
+//        MatcherAssert.assertThat(users, IsEmptyCollection.empty());
+//        //
+//        assertTrue(users.isEmpty(), "User list should be empty");
+//        // input -> [box = func] -> actual output
+//    }
 
     @Test
     void userSizeIfUserAdded(UserService userService) {
@@ -257,10 +254,10 @@ public class UserServiceTest extends TestBase {
 //        assertTrue(result);
 //    }
 
-    @Test
-    @DisplayName("Should return false when the user is not deleted")
-    void deleteWhenUserIsNotDeletedThenReturnFalse() {
-        when(userDao.delete(anyInt())).thenReturn(false);
-        assertFalse(userService.delete(1));
-    }
+//    @Test
+//    @DisplayName("Should return false when the user is not deleted")
+//    void deleteWhenUserIsNotDeletedThenReturnFalse() {
+//        when(userDao.delete(anyInt())).thenReturn(false);
+//        assertFalse(userService.delete(1));
+//    }
 }
