@@ -12,6 +12,35 @@ import static org.junit.jupiter.api.Assertions.*;
 class BMICalculatorTest {
 
     @Test
+    void getBMIScoresShouldReturnAnEmptyArrayWhenTheCodersListIsEmpty() {
+        //given
+        List<Coder> coders = new ArrayList<>();
+        //when
+        double[] bmiScores = BMICalculator.getBMIScores(coders);
+        //then
+        assertEquals(0, bmiScores.length);
+    }
+
+    @Test
+    void getBMIScoresShouldReturnAnArrayOfBMIScores() {
+        //given
+        List<Coder> coders = new ArrayList<>();
+        coders.add(new Coder(1.80, 80));
+        coders.add(new Coder(1.70, 70));
+        coders.add(new Coder(1.60, 60));
+        coders.add(new Coder(1.50, 50));
+        double[] expected = {24.69, 24.22, 23.44, 22.22};
+        //when
+        double[] bmiScores = BMICalculator.getBMIScores(coders);
+        //then
+        assertArrayEquals(expected, bmiScores);
+//        assertEquals(25.0, bmiScores[0]);
+//        assertEquals(24.22, bmiScores[1]);
+//        assertEquals(22.22, bmiScores[2]);
+//        assertEquals(20.0, bmiScores[3]);
+    }
+
+    @Test
     void shouldReturnCodeWithWorstBMIWhenCodeListNotEmpty() {
         //given
         List<Coder> coders = new ArrayList<>();
