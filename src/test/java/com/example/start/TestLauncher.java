@@ -24,9 +24,9 @@ public class TestLauncher {
                 .request()
 //                .selectors(DiscoverySelectors.selectClass(UserServiceTest.class))
                 .selectors(DiscoverySelectors.selectPackage("com.example.start"))
-                .filters(
-                        TagFilter.includeTags("login")
-                )
+//                .filters(
+//                        TagFilter.includeTags("login")
+//                )
                 .listeners()
                 .build();
         launcher.execute(request, summaryGeneratingListener);

@@ -62,6 +62,7 @@ public class ProductServiceImplJunit4Test {
         productService.shouldBeeOdd(3);
     }
 
+    @Test
     public void throwsException2() {
         exceptionRule.expect(ProductException.class);
         productService.shouldBeeOdd(3);
